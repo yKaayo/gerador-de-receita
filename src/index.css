@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Header */
+.logo {
+  @apply flex flex-col items-center min-w-[134px] mx-5;
+}
+
+.line {
+  @apply mx-2 w-full h-2 border-2 border-gray-500 rounded-full;
+}
+/* Header - End */
+
+/* Main */
+.btn--gray {
+  @apply px-4 py-1 bg-gray-600 border-2 border-gray-600 text-white font-semibold hover:bg-transparent hover:text-gray-600 duration-300;
+}
+/* Main - End */
