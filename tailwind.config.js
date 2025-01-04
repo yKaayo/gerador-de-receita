@@ -4,7 +4,7 @@ export default {
   content: [
     "./index.html",
     "./src/**/*.jsx",
-    "./node_modules/@radix-ui/**/*.jsx",
+    "./node_modules/@radix-ui/**/*.{jsx, js}",
   ],
   theme: {
     extend: {

@@ -1,18 +1,21 @@
 import { useState } from "react";
-
 import {
   Tooltip,
   TooltipTrigger,
   TooltipContent,
   TooltipProvider,
-} from "../components/ui/tooltip";
-
-import { Input } from "../components/ui/input";
-
-import { pipeline } from "@xenova/transformers";
+} from "@/components/ui/tooltip";
+import { Input } from "@/components/ui/input";
+import { generateRecipe } from "@/services/recipeGenerated";
+import Recipe from "../layout/Recipe";
 
 export default function Main() {
-  const [addIngredient, setAddIngredient] = useState([]);
+  const [addIngredient, setAddIngredient] = useState([
+    "Cebola",
+    "Tomate",
+    "Limão",
+  ]);
+  const [recipe, setRecipe] = useState("");
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -22,34 +25,14 @@ export default function Main() {
     setAddIngredient((ingredient) => [...ingredient, newIngredient]);
   }
 
+  async function getRecipe() {
+    const GENERATED_RECIPE = await generateRecipe(ingredients);
+    setRecipe(GENERATED_RECIPE);
+  }
+
   const ingredients = addIngredient.map((ingredient) => (
-    <li key={ingredient}>- {ingredient}</li>
+    <p key={ingredient}>- {ingredient}</p>
   ));
-
-  console.log(ingredients);
-  
-
-  async function loadModel() {
-    const qa = await pipeline(
-      "question-answering",
-      "deepset/roberta-base-squad2"
-    );
-
-    return qa;
-  }
-
-  async function answerQuestion(question) {
-    const qa = await loadModel();
-
-    const result = await qa({
-      question: `Eu tenho esses ingredientes ${ingredients}`,
-      context:
-        "Você é um assistente que recebe uma lista de ingredientes que um usuário tem e sugere uma receita que ele pode fazer com alguns ou todos esses ingredientes. Você não precisa usar todos os ingredientes que eles mencionam na sua receita. A receita pode incluir ingredientes adicionais que eles não mencionaram, mas tente não incluir muitos ingredientes extras que são difíceis de achar com um preço acessível. Formate sua resposta em markdown para facilitar a renderização em uma página da web",
-    });
-
-    console.log("Resposta:", result.answer);
-    console.log("Pontuação:", result.score);
-  }
 
   return (
     <main className="px-5 sm:px-10 min-h-[calc(100dvh_-_60px)] bg-slate-50">
@@ -68,7 +51,7 @@ export default function Main() {
         {ingredients.length > 0 && (
           <h3 className="mt-10 text-3xl font-semibold">Ingredientes:</h3>
         )}
-        <ul className=" px-5">
+        <ul className="px-5">
           {<li className="mt-4 mb-10 text-lg">{ingredients}</li>}
         </ul>
 
@@ -82,6 +65,7 @@ export default function Main() {
             <Tooltip>
               <TooltipTrigger asChild>
                 <button
+                  onClick={getRecipe}
                   disabled={ingredients.length > 2 ? false : true}
                   className={`${
                     ingredients.length > 2
@@ -100,6 +84,7 @@ export default function Main() {
             </Tooltip>
           </TooltipProvider>
         </section>
+        <Recipe recipe={recipe} />
       </div>
     </main>
   );
