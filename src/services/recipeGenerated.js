@@ -9,7 +9,7 @@ export async function generateRecipe(allIngredients) {
     {
       method: "POST",
       headers: {
-        "Authorization": `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
       stop: null,

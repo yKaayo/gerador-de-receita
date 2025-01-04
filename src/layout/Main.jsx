@@ -10,11 +10,7 @@ import { generateRecipe } from "@/services/recipeGenerated";
 import Recipe from "../layout/Recipe";
 
 export default function Main() {
-  const [addIngredient, setAddIngredient] = useState([
-    "Cebola",
-    "Tomate",
-    "Limão",
-  ]);
+  const [addIngredient, setAddIngredient] = useState([]);
   const [recipe, setRecipe] = useState("");
 
   function handleSubmit(e) {
