@@ -15,20 +15,20 @@ export default function Main() {
 
   function handleSubmit(e) {
     e.preventDefault();
-    const formData = new FormData(e.currentTarget);
+    const formData = new FormData(e.target);
     const newIngredient = formData.get("ingredient");
-
     setAddIngredient((ingredient) => [...ingredient, newIngredient]);
+    e.target.reset()
   }
+  
+  const ingredients = addIngredient.map((ingredient) => (
+    <p key={ingredient}>- {ingredient}</p>
+  ));
 
   async function getRecipe() {
     const GENERATED_RECIPE = await generateRecipe(ingredients);
     setRecipe(GENERATED_RECIPE);
   }
-
-  const ingredients = addIngredient.map((ingredient) => (
-    <p key={ingredient}>- {ingredient}</p>
-  ));
 
   return (
     <main className="px-5 sm:px-10 min-h-[calc(100dvh_-_60px)] bg-slate-50">
